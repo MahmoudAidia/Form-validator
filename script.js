@@ -20,10 +20,14 @@ function showSuccess(input) {
 }
 
 // Check email is Valid
-function isValidEmail(email) {
+function checkEmail(input) {
   const re =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
+  if (re.test(input.value.trim())) {
+    showSuccess(input);
+  } else {
+    showError(input, "Email is not valid");
+  }
 }
 
 // Check Required Fields Function
@@ -54,18 +58,15 @@ function checkLength(value, min, max) {
       value,
       `${getFieldName(value)}must be less than ${max} Characters `
     );
-  } else {
+  } else if (value.value > min && value.value < max) {
     showSuccess(value);
   }
 }
 
-// Check Confirmation
-function checkConfirmation(item1, item2) {
-  if (item1.value === item2.value) {
-    showSuccess(item1);
-    showSuccess(itme2);
-  } else {
-    showError(item2, "The password is not matched");
+// Check password check
+function checkPasswordMatch(item1, item2) {
+  if (item1.value !== item2.value) {
+    showError(item2, "The password does not matched");
   }
 }
 
@@ -76,5 +77,6 @@ form.addEventListener("submit", (e) => {
   checkRequired([username, email, password, password2]);
   checkLength(username, 3, 15);
   checkLength(password, 6, 20);
-  checkConfirmation(password, password2);
+  checkEmail(email);
+  checkPasswordMatch(password, password2);
 });
